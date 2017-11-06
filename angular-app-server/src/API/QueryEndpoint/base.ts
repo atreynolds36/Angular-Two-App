@@ -35,10 +35,21 @@ export class BaseQueryHandler{
 
     protected getDataByQuery( query , callback : (err , data ?: any ) => void ) : void{
         this.connector.query('central.db' , query , (err, results) => {
+            console.log('query res length ' + results.length)
             if(err)
                 callback(err);
             else
                 callback(null , results);
+        })
+    }
+
+    protected getDataById( id , callback : (err , data ?: any ) => void ) : void{
+        this.connector.queryById( id , (err, doc) => {
+            console.log('fetch ' + doc)
+            if(err)
+                callback(err);
+            else
+                callback(null , doc);
         })
     }
 }

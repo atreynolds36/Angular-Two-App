@@ -4,13 +4,16 @@ interface QueryJsonResponse{
 }
 
 
+
+// NOT USED I DONT THINK
 export class QueryResponse implements  QueryJsonResponse {
     results : Array<Node>;
     __metadata : Object;
-    constructor(res){
+    constructor(type : string , res : Array<any>){
         this.__metadata = {
-            result_length : res.length
-        }
+            result_length : res.length,
+            type : type
+        };
         this.results = res;
     }
 }

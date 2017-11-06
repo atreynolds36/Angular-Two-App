@@ -16,6 +16,7 @@ import { BaseQueryHandler } from './QueryEndpoint/base';
 import { QueryResults } from './Shim/query-results';
 
 import RestaurantQueryHandler from './QueryEndpoint/RestaurantEndPointDelegator';
+import RatingsQueryHandler from './QueryEndpoint/RatingsEndPointDelegator';
 
 /*
  DEFINES THE /get API ROUTE
@@ -25,6 +26,7 @@ export class QUERYRouter{
     router : Router;
     connector : Connector;
     restaurantQueryHandler : BaseQueryHandler;
+    ratingsQueryHandler : BaseQueryHandler;
 
     static bootstrap() : Router {
         return new QUERYRouter().router;
@@ -35,6 +37,7 @@ export class QUERYRouter{
         this.configRoutes();
         this.connector = Connector.bootstrap();
         this.restaurantQueryHandler = new BaseQueryHandler();
+        this.ratingsQueryHandler = new BaseQueryHandler();
     }
 
     configRoutes(){
@@ -45,22 +48,20 @@ export class QUERYRouter{
     /*
         GET Ratings by Restaurant Id
      */
+
     private getQueryRatings(req : Request , res : Response ){
         let params = req.query;
-        console.log(params.restaurantId);
-        if(params.filter == 'byRestaurant' && params.restaurantId ){
-            let restaurantId = params.restaurantId;
-            this.connector.queryById( restaurantId , (err , doc ) => {
-               if(err)
-                   res.status(400).send({ error : err } );
-               else{
-                    let results = doc.ratings;
-                   res.status(200).send( QueryResults.transformIntoOutGoingResults(results) );
-               }
-            });
-        }
-        else
+        let handler = RatingsQueryHandler(params.filter);
+        if(handler){
+            handler.execute(params , (err, results ) => {
+                if(err)
+                    res.status(404).send({ error : err.message} );
+                else
+                    res.status(200).send( QueryResults.transformIntoOutGoingResults('Ratings' , results) );
+            })  ;
+        }else{
             res.status(400).send({ error : 'Invalid Query'});
+        }
     }
 
     private getQueryRestaurantsAll(req : Request, res : Response ){
@@ -85,55 +86,19 @@ export class QUERYRouter{
                 if(err)
                     res.status(404).send({ error : err.message} );
                 else
-                    res.status(200).send( QueryResults.transformIntoOutGoingResults(results) );
+                    res.status(200).send( QueryResults.transformIntoOutGoingResults('Restaurants' , results) );
             })  ;
         }else{
             this.queryAllRestaurants(req,res);
         }
     }
-    /*
-    private getQueryRestaurants(req : Request, res: Response){
-        let params = req.query;
-        console.log('entah');
-        if(params.filter ){
-            //filter respond by filter value
-            if( params.filter == 'coordinates' ){
-                if( params.lng && params.lng ){
-                    let buildQuery = this.relativeAreaQuery(params.lat , params.lng );
-                    this.connector.query('central.db' , buildQuery , (err, results) => {
-                        if(err)
-                            res.status(404).send({ error : err.message} );
-                        else
-                            res.status(200).send( QueryResults.transformIntoOutGoingResults(results) );
-                    })
-                }else{
-                    res.status(400).send({ msg : 'Query Requires lat and lng' } );
-                }
-
-            }else{
-                console.error('Invalid Query');
-                res.status(400).send({ msg : 'Query Not Supported' } );
-            }
-        }else{
-            this.queryAllRestaurants(req,res);
-        }
-    }*/
-
 
     private queryAllRestaurants(req: Request, res : Response ){
         this.connector.queryAll('central.db' , (err, docs) => {
             if(err)
                 res.status(400).send({ error : true });
             else
-                res.status(200).send( QueryResults.transformIntoOutGoingResults(docs) );
+                res.status(200).send( QueryResults.transformIntoOutGoingResults('Restaurants' , docs) );
         })
-    }
-
-    private relativeAreaQuery(latInput, lngInput) : Object{
-        let lat = parseFloat(latInput);
-        let lng = parseFloat(lngInput);
-        console.log(lat + .2 );
-        console.log(lng);
-        return { lat : { $lt : lat + .2 , $gt : lat - .2  } , lng : { $lt : lng + .2 , $gt : lng - .2 } };
     }
 }

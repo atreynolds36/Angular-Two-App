@@ -78,7 +78,7 @@ export class Rating extends MongoDocument implements RatingInterface{
     restaurant_id : string;
     constructor(payload : any){
         super();
-        this.food_name = payload.food_name && payload.food_name.toLowerCase();
+        this.food_name = payload.food_name && payload.food_name.toUpperCase();
         this.grade = parseInt(payload.grade);
         this.price_range = parseInt(payload.price_range);
         this.restaurant_id = payload.restaurant_id;

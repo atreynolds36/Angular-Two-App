@@ -26,6 +26,22 @@ export class CreateRouter{
     configRoutes(){
         this.router.post('/restaurant' , this.createRestaurantRoute.bind(this) );
         this.router.post('/rating' , this.createRating.bind(this) );
+        this.router.post('/masterdata/food-item' , this.addMasterDataFood.bind(this) );
+    }
+
+    private addMasterDataFood(req : Request, res : Response ) {
+        let newValue = req.body.value;
+        if (newValue) {
+            newValue = newValue.toUpperCase();
+            this.connector.AddToMasterData('FoodMasterData', newValue , (err,object) => {
+                if(err)
+                    res.status(400).send();
+                else
+                    res.status(201).send(object);
+            })
+        }else{
+            res.status(400).send({ 'error' : 'Missing value field in payload'});
+        }
     }
 
     private createRestaurantRoute(req : Request , res : Response ){
@@ -47,6 +63,14 @@ export class CreateRouter{
     private createRating(req : Request , res : Response ){
         let ratingToAdd = new Rating(req.body);
         if( ratingToAdd.validate() ){
+            //Add to food masterdata if it doesnt exist
+            //todo - better way to do this if we do this live
+            this.connector.AddToMasterData( 'FoodMasterData' , ratingToAdd.food_name , (err, doc) => {
+                if(err)
+                    console.error(err);
+                else
+                    console.log('Successful update for ' + ratingToAdd.food_name );
+            });
             this.connector.findToModify('central.db' , ratingToAdd.restaurant_id , (err : Error , doc : any ) => {
                 if(err)
                     res.status(400).send({ error : true });
@@ -120,17 +144,4 @@ export class CreateRouter{
         }
     }
 
-}
-
-class PostRequestValidator{
-    static validatePayload(schema : Array<string> , payload) : boolean{
-        let success = true;
-        schema.forEach( (str) => {
-            if( payload[str] === undefined ){
-                success = false;
-                return false;
-            }
-        });
-        return success;
-    }
 }

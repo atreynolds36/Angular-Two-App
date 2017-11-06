@@ -3,11 +3,12 @@
  */
 
 export class QueryResults {
-    static transformIntoOutGoingResults(results : Array<any>) : Object{
+    static transformIntoOutGoingResults(type : string , results : Array<any>) : Object{
         return {
             queryInfo : {
                 resultLength : results.length,
-                hasMore : false // temporary
+                hasMore : false, // temporary
+                type : type
             },
             results : results,
         }

@@ -4,10 +4,12 @@
 
 import { CoordinateQueryHandler } from './RestaurantEndPointer/coordinateQuery';
 import { AreaTopRatedQuery } from './RestaurantEndPointer/areaTopRatedQuery';
+import { FoodTypeQuery } from './RestaurantEndPointer/foodTypeQuery';
 import { BaseQueryHandler } from './base';
 
 const coordinateQueryHandler= new CoordinateQueryHandler();
 const areatopInAreaHandler = new AreaTopRatedQuery();
+const foodTypeQuery = new FoodTypeQuery();
 
 export default function ( filter ) : BaseQueryHandler {
     switch( filter ){
@@ -15,6 +17,8 @@ export default function ( filter ) : BaseQueryHandler {
             return coordinateQueryHandler;
         case 'topInArea' :
             return areatopInAreaHandler;
+        case 'foodType' :
+            return foodTypeQuery;
         default :
             return null;
     }

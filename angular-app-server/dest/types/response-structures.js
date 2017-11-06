@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class QueryResponse {
-    constructor(res) {
+    constructor(type, res) {
         this.__metadata = {
-            result_length: res.length
+            result_length: res.length,
+            type: type
         };
         this.results = res;
     }

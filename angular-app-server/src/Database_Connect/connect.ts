@@ -6,19 +6,22 @@ import { Restaurant , Rating } from '../types/API_Incoming_Payload';
 const mongo_uri = 'mongodb://localhost:27017/angular';
 const object_id = mongodb.ObjectID;
 
-export class Connector{
-    client : MongoClient;
-    mongodb : Db;
-    static bootstrap() : Connector {
+export class Connector {
+    client: MongoClient;
+    mongodb: Db;
+
+    static bootstrap(): Connector {
         return new Connector();
     }
-    constructor(){
+
+    constructor() {
         this.client = mongodb.MongoClient;
         this.connect();
     }
-    connect(){
-        this.client.connect( mongo_uri , (err, db : Db ) => {
-            if(err)
+
+    connect() {
+        this.client.connect(mongo_uri, (err, db: Db) => {
+            if (err)
                 console.error(err);
             else
                 this.mongodb = db;
@@ -27,17 +30,17 @@ export class Connector{
 
     //CONSOLIDATE DB
 
-    public newAdd(document : any , callbackFn : (err : Error, newDoc ?: any ) => void ) : void {
+    public newAdd(document: any, callbackFn: (err: Error, newDoc ?: any) => void): void {
         let collection = this.mongodb.collection('central.db');
-        collection.insertOne(document , (err : Error , newDoc ) => {
-            if(err)
-                callbackFn( err );
+        collection.insertOne(document, (err: Error, newDoc) => {
+            if (err)
+                callbackFn(err);
             else
-                callbackFn( null , newDoc.ops[0] );
+                callbackFn(null, newDoc.ops[0]);
         })
     }
 
-    public newUpdate( documentId : string , document : any , callbackFn : (err : Error , newDoc ?: any ) => void ) : void {
+    public newUpdate(documentId: string, document: any, callbackFn: (err: Error, newDoc ?: any) => void): void {
         let collection = this.mongodb.collection('central.db');
         let docId;
         try {
@@ -53,115 +56,122 @@ export class Connector{
             }
         })
     }
+
     /*
-        Update Existing Record by ID
+     Update Existing Record by ID
      */
-    public update( collectionName : string , documentId : string , document : any , callbackFn : (err : Error , newDoc ?: any ) => void ) : void {
-        let collection = this.mongodb.collection( collectionName ) ;
+    public update(collectionName: string, documentId: string, document: any, callbackFn: (err: Error, newDoc ?: any) => void): void {
+        let collection = this.mongodb.collection(collectionName);
         let docId;
-        try{
+        try {
             docId = new object_id(documentId);
-        } catch(err){
+        } catch (err) {
             callbackFn(err);
         }
-        collection.findOneAndUpdate({ _id : docId } , { $set : document } , (err : Error , updatedDoc ) => {
-            if(err)
-                callbackFn( err );
-            else{
-                callbackFn( null , updatedDoc );
+        collection.findOneAndUpdate({_id: docId}, {$set: document}, (err: Error, updatedDoc) => {
+            if (err)
+                callbackFn(err);
+            else {
+                callbackFn(null, updatedDoc);
             }
         })
     }
-    /*
-        Update Based on Query
-     */
-    public updateByQuery( queryFilter : any , document : any , callbackFn : (err : Error , newDoc ?: any ) => void ) : void {
-        let collection = this.mongodb.collection( 'central.db' ) ;
-        collection.findOneAndUpdate( queryFilter , { $set : document } , (err : Error , updatedDoc ) => {
-            if(err)
-                callbackFn( err );
-            else{
-                callbackFn( null , updatedDoc );
-            }
-        })
-    }
+
     /*
      Update Based on Query
      */
-    public updateByQueryAddToArray( queryFilter : any , document : any , callbackFn : (err : Error , newDoc ?: any ) => void ) : void {
-        let collection = this.mongodb.collection( 'central.db' ) ;
-        collection.findOneAndUpdate( queryFilter , { $push : document } , (err : Error , updatedDoc ) => {
-            if(err)
-                callbackFn( err );
-            else{
-                callbackFn( null , updatedDoc );
+    public updateByQuery(queryFilter: any, document: any, callbackFn: (err: Error, newDoc ?: any) => void): void {
+        let collection = this.mongodb.collection('central.db');
+        collection.findOneAndUpdate(queryFilter, {$set: document}, (err: Error, updatedDoc) => {
+            if (err)
+                callbackFn(err);
+            else {
+                callbackFn(null, updatedDoc);
             }
         })
     }
-    /*
-        TEST
-     */
-    public queryAll( collectionName : string , callbackFn : (err : Error , docs ?: Array<any> ) => void ) : void {
-        let collection : Collection = this.mongodb.collection( collectionName ) ;
 
-        collection.find().toArray( (err, docs ) => {
-            if(err)
+    /*
+     Update Based on Query
+     */
+    public updateByQueryAddToArray(queryFilter: any, document: any, callbackFn: (err: Error, newDoc ?: any) => void): void {
+        let collection = this.mongodb.collection('central.db');
+        collection.findOneAndUpdate(queryFilter, {$push: document}, (err: Error, updatedDoc) => {
+            if (err)
                 callbackFn(err);
-            else{
-                callbackFn(null , docs );
+            else {
+                callbackFn(null, updatedDoc);
+            }
+        })
+    }
+
+    /*
+     TEST
+     */
+    public queryAll(collectionName: string, callbackFn: (err: Error, docs ?: Array<any>) => void): void {
+        let collection: Collection = this.mongodb.collection(collectionName);
+
+        collection.find().toArray((err, docs) => {
+            if (err)
+                callbackFn(err);
+            else {
+                callbackFn(null, docs);
             }
         });
     }
-    /*
-        Find one record in one collection
-     */
-    public find( collectionName : string , id : string , callbackFn : (err : Error , docs ?: Object ) => void ) : void {
-        let collection = this.mongodb.collection( collectionName ) ;
-        let docId;
-        try{
-            docId = new object_id(id);
-        } catch(err){
-            callbackFn(err);
-        }
-        let questionDoc = collection.findOne({ _id : docId } , { _id : 0 } , (err , doc) => {
-            if(doc){
-                console.log(doc);
-                callbackFn(null,doc)
-            } else
-                callbackFn(new Error('Could not find record'));
-        });
-    }
+
     /*
      Find one record in one collection
      */
-    public findToModify( collectionName : string , id : string , callbackFn : (err : Error , docs ?: Object ) => void ) : void {
-        let collection = this.mongodb.collection( collectionName ) ;
+    public find(collectionName: string, id: string, callbackFn: (err: Error, docs ?: Object) => void): void {
+        let collection = this.mongodb.collection(collectionName);
         let docId;
-        try{
+        try {
             docId = new object_id(id);
-        } catch(err){
+        } catch (err) {
             callbackFn(err);
         }
-        let questionDoc = collection.findOne({ _id : docId } , (err , doc) => {
-            if(doc){
+        let questionDoc = collection.findOne({_id: docId}, {_id: 0}, (err, doc) => {
+            if (doc) {
                 console.log(doc);
-                callbackFn(null,doc)
+                callbackFn(null, doc)
             } else
                 callbackFn(new Error('Could not find record'));
         });
     }
+
     /*
-        Query a collection by queryObject
+     Find one record in one collection
      */
-    public query(collectionName : string , queryObject : Object , callbackFn : (err : Error , docs ?: Array<any> ) => void ) : void {
-        this.baseQuery(collectionName, queryObject , callbackFn );
+    public findToModify(collectionName: string, id: string, callbackFn: (err: Error, docs ?: Object) => void): void {
+        let collection = this.mongodb.collection(collectionName);
+        let docId;
+        try {
+            docId = new object_id(id);
+        } catch (err) {
+            callbackFn(err);
+        }
+        let questionDoc = collection.findOne({_id: docId}, (err, doc) => {
+            if (doc) {
+                console.log(doc);
+                callbackFn(null, doc)
+            } else
+                callbackFn(new Error('Could not find record'));
+        });
     }
 
-    private baseQuery(collectionName : string  , queryObject : Object , callbackFn : (err : Error , docs ?: Array<any> ) => void ) : void {
-        let collection = this.mongodb.collection( collectionName ) ;
+    /*
+     Query a collection by queryObject
+     */
+    public query(collectionName: string, queryObject: Object, callbackFn: (err: Error, docs ?: Array<any>) => void): void {
+        this.baseQuery(collectionName, queryObject, callbackFn);
+    }
+
+    private baseQuery(collectionName: string, queryObject: Object, callbackFn: (err: Error, docs ?: Array<any>) => void): void {
+        let collection = this.mongodb.collection(collectionName);
         let questionDoc = collection.find(queryObject);
 
-        questionDoc.toArray((err, docs ) => {
+        questionDoc.toArray((err, docs) => {
             if (err)
                 callbackFn(err);
             else {
@@ -170,31 +180,47 @@ export class Connector{
         })
     }
 
-    public queryById( id : string , callbackFn : (err : Error , docs ?: any ) => void ) : void {
-        let collection = this.mongodb.collection( 'central.db' ) ;
+    public queryById(id: string, callbackFn: (err: Error, docs ?: any) => void): void {
+        let collection = this.mongodb.collection('central.db');
         let docId;
-        try{
+        try {
             docId = new object_id(id);
-        } catch(err){
+        } catch (err) {
             callbackFn(err);
         }
-        let questionDoc = collection.findOne({ _id : docId } , (err , doc) => {
-            if(doc){
+        let questionDoc = collection.findOne({_id: docId}, (err, doc) => {
+            if (doc) {
                 console.log(doc);
-                callbackFn(null,doc)
+                callbackFn(null, doc)
             } else
                 callbackFn(new Error('Could not find record'));
         });
     }
 
-    public groupByFields(collectionStr : string , groupByClause : Object , callbackFn : (err : Error , docs ?: Object ) => void) : void {
-        let collection = this.mongodb.collection(collectionStr);
-        collection.aggregate([groupByClause] , (err, docs ) => {
+    public filterMasterdata( dataType: string, queryObject: any, callbackFn: (err: Error, docs ?: any) => void): void {
+        this.baseQuery(dataType , queryObject , callbackFn );
+    }
+
+    public AddToMasterData(dataType : string , newValue : string , callbackFn: (err: Error, docs ?: any) => void): void {
+        let collection = this.mongodb.collection( dataType );
+        this.baseQuery('FoodMasterData' , { 'values' : newValue } , (err, docs ) => {
             if (err)
                 callbackFn(err);
-            else {
-                callbackFn(null, docs);
+            else{
+                //if it exists - dont add again
+                if( docs.length ){
+                    callbackFn(null , docs[0] )
+                } else{
+                    collection.insertOne( { 'values' : newValue }, (err: Error, updatedDoc) => {
+                        if (err)
+                            callbackFn(err);
+                        else {
+                            callbackFn(null, updatedDoc);
+                        }
+                    })
+                }
             }
-        })
+        });
     }
+
 }

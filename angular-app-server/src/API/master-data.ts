@@ -13,6 +13,7 @@ import { Restaurant_Schema , Ratings_Schema, Meals_Schema } from '../types/API_I
 
 export class MasterDataRouter{
     router : Router;
+    connector : Connector;
 
     static bootstrap() : Router {
         return new MasterDataRouter().router;
@@ -21,11 +22,12 @@ export class MasterDataRouter{
     constructor(){
         this.router = express.Router();
         this.configRoutes();
+        this.connector = Connector.bootstrap();
     }
 
     configRoutes(){
         this.router.get('/cuisine-types' , this.foodGenreRoute.bind(this) );
-        this.router.get('/:genres/types' , this.foodTypeByGenre.bind(this) );
+        this.router.get('/food-types' , this.foodTypes.bind(this) );
     }
 
     foodGenreRoute(req : Request, res : Response){
@@ -35,11 +37,23 @@ export class MasterDataRouter{
             "ITALIAN",
             "MEXICAN",
             "SEAFOOD",
-            "MEDITERRANEAN"
+            "MEDITERRANEAN",
+            "VIETNAMESE",
+            "JAPANESE"
         ]);
     }
 
-    foodTypeByGenre(req : Request, res:Response){
 
+
+    foodTypes(req : Request, res:Response){
+        let filter = req.query.filter && req.query.filter.toUpperCase();
+        let expr = new RegExp(filter);
+        let filterQuery = { 'values' : expr };
+        this.connector.filterMasterdata('FoodMasterData' , filterQuery , (err , values ?: any) => {
+            if(err)
+                res.status(400).send({ Error : 'In Masterdata'});
+            else
+                res.status(200).send(values)
+        });
     }
 }

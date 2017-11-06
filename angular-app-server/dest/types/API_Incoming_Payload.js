@@ -41,7 +41,7 @@ exports.Restaurant = Restaurant;
 class Rating extends MongoDocument {
     constructor(payload) {
         super();
-        this.food_name = payload.food_name && payload.food_name.toLowerCase();
+        this.food_name = payload.food_name && payload.food_name.toUpperCase();
         this.grade = parseInt(payload.grade);
         this.price_range = parseInt(payload.price_range);
         this.restaurant_id = payload.restaurant_id;

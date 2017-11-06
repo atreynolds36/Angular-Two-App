@@ -10,10 +10,20 @@ class BaseQueryHandler {
     }
     getDataByQuery(query, callback) {
         this.connector.query('central.db', query, (err, results) => {
+            console.log('query res length ' + results.length);
             if (err)
                 callback(err);
             else
                 callback(null, results);
+        });
+    }
+    getDataById(id, callback) {
+        this.connector.queryById(id, (err, doc) => {
+            console.log('fetch ' + doc);
+            if (err)
+                callback(err);
+            else
+                callback(null, doc);
         });
     }
 }

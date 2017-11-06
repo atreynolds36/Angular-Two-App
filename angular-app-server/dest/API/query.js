@@ -5,6 +5,7 @@ const connect_1 = require("../Database_Connect/connect");
 const base_1 = require("./QueryEndpoint/base");
 const query_results_1 = require("./Shim/query-results");
 const RestaurantEndPointDelegator_1 = require("./QueryEndpoint/RestaurantEndPointDelegator");
+const RatingsEndPointDelegator_1 = require("./QueryEndpoint/RatingsEndPointDelegator");
 class QUERYRouter {
     static bootstrap() {
         return new QUERYRouter().router;
@@ -14,6 +15,7 @@ class QUERYRouter {
         this.configRoutes();
         this.connector = connect_1.Connector.bootstrap();
         this.restaurantQueryHandler = new base_1.BaseQueryHandler();
+        this.ratingsQueryHandler = new base_1.BaseQueryHandler();
     }
     configRoutes() {
         this.router.get('/ratings', this.getQueryRatings.bind(this));
@@ -22,20 +24,18 @@ class QUERYRouter {
     }
     getQueryRatings(req, res) {
         let params = req.query;
-        console.log(params.restaurantId);
-        if (params.filter == 'byRestaurant' && params.restaurantId) {
-            let restaurantId = params.restaurantId;
-            this.connector.queryById(restaurantId, (err, doc) => {
+        let handler = RatingsEndPointDelegator_1.default(params.filter);
+        if (handler) {
+            handler.execute(params, (err, results) => {
                 if (err)
-                    res.status(400).send({ error: err });
-                else {
-                    let results = doc.ratings;
-                    res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults(results));
-                }
+                    res.status(404).send({ error: err.message });
+                else
+                    res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults('Ratings', results));
             });
         }
-        else
+        else {
             res.status(400).send({ error: 'Invalid Query' });
+        }
     }
     getQueryRestaurantsAll(req, res) {
         this.connector.queryAll('central.db', ((err, results) => {
@@ -54,7 +54,7 @@ class QUERYRouter {
                 if (err)
                     res.status(404).send({ error: err.message });
                 else
-                    res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults(results));
+                    res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults('Restaurants', results));
             });
         }
         else {
@@ -66,15 +66,8 @@ class QUERYRouter {
             if (err)
                 res.status(400).send({ error: true });
             else
-                res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults(docs));
+                res.status(200).send(query_results_1.QueryResults.transformIntoOutGoingResults('Restaurants', docs));
         });
-    }
-    relativeAreaQuery(latInput, lngInput) {
-        let lat = parseFloat(latInput);
-        let lng = parseFloat(lngInput);
-        console.log(lat + .2);
-        console.log(lng);
-        return { lat: { $lt: lat + .2, $gt: lat - .2 }, lng: { $lt: lng + .2, $gt: lng - .2 } };
     }
 }
 exports.QUERYRouter = QUERYRouter;

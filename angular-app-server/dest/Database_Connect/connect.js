@@ -160,13 +160,27 @@ class Connector {
                 callbackFn(new Error('Could not find record'));
         });
     }
-    groupByFields(collectionStr, groupByClause, callbackFn) {
-        let collection = this.mongodb.collection(collectionStr);
-        collection.aggregate([groupByClause], (err, docs) => {
+    filterMasterdata(dataType, queryObject, callbackFn) {
+        this.baseQuery(dataType, queryObject, callbackFn);
+    }
+    AddToMasterData(dataType, newValue, callbackFn) {
+        let collection = this.mongodb.collection(dataType);
+        this.baseQuery('FoodMasterData', { 'values': newValue }, (err, docs) => {
             if (err)
                 callbackFn(err);
             else {
-                callbackFn(null, docs);
+                if (docs.length) {
+                    callbackFn(null, docs[0]);
+                }
+                else {
+                    collection.insertOne({ 'values': newValue }, (err, updatedDoc) => {
+                        if (err)
+                            callbackFn(err);
+                        else {
+                            callbackFn(null, updatedDoc);
+                        }
+                    });
+                }
             }
         });
     }
