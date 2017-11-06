@@ -1,0 +1,11 @@
+<agm-marker
+  [latitude]="marker.lat"
+  [longitude]="marker.lng"
+  (markerClick)="loadRestaurantRatings(marker._id)">
+  <agm-info-window>
+    <h4>{{marker.name}}</h4>
+    <ul *ngFor="let rtings of ratings">
+      <li><b>{{rtings.score}}</b> -- {{rtings.food}}</li>
+    </ul>
+  </agm-info-window>
+</agm-marker>

@@ -1,0 +1,18 @@
+<h4>Highly Rated Restaurants in your Area</h4>
+<table class="table" style="background-color:white">
+  <tr *ngFor="let res of restaurantList">
+    <td>
+      {{res.scoreAverage}}
+    </td>
+    <td>
+      <div>
+        <div> {{res.name}}</div>
+        <i style="margin-left: 10px "> {{res.address}} </i>
+
+        <div style="margin-left: 200px" *ngIf="res.ratings[0]">
+          <list-item-rating-component [ratingList]="res.ratings"></list-item-rating-component>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>

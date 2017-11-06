@@ -1,0 +1,51 @@
+\<div class="row">
+  <div class="col-lg-4">
+    <ul class="nav nav-pills">
+      <li class="nav-item disabled">
+        <a>Search By :</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="this.panel = ActivePanel.FOOD" [ngClass]="{'active' : this.panel == ActivePanel.FOOD }" >Food</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="this.panel = ActivePanel.CUISINE" [ngClass]="{'active' : this.panel == ActivePanel.CUISINE }" >Cuisine</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-6">
+    <div *ngIf="this.panel == ActivePanel.FOOD">
+      <crv-typeahead (inputChange)="sendFoodQuery($event)"></crv-typeahead>
+    </div>
+    <div *ngIf="this.panel == ActivePanel.CUISINE">
+      <select class="form-control" #searchFoodType >
+        <option *ngFor="let t of types" value={{t}}>
+          {{t}}
+        </option>
+      </select>
+      <button (click)="searchByCuisine( searchFoodType.value )">Go</button>
+    </div>
+  </div>
+</div>
+<br/>
+
+<ul class="nav justify-content-center">
+  <li class="nav-item">
+    <a class="nav-link active" (click)="activeComponent = ActiveComponentEnum.LIST " routerLinkActive="active">List View</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" (click)="activeComponent = ActiveComponentEnum.MAP">Map View</a>
+  </li>
+</ul>
+
+<div>
+  <list-view-component *ngIf="activeComponent == ActiveComponentEnum.LIST &&
+                              activeList == ActiveList.RESTAURANT" [restaurantList]="restaurantList"></list-view-component>
+  <ratings-list-component *ngIf="activeComponent == ActiveComponentEnum.LIST &&
+                              activeList == ActiveList.RATINGS"  [ratingsList]="ratingsList"></ratings-list-component>
+  <map-component *ngIf="activeComponent == ActiveComponentEnum.MAP" [ratingsList]="ratingsList"
+                  [restaurantList]="restaurantList" [listType]="activeList"></map-component>
+</div>
+

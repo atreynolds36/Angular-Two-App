@@ -1,0 +1,21 @@
+<div class="justify-content-center">
+  <h1>Add Food Rating</h1>
+  <div class="form-group">
+    <label>Restaurant</label>
+    <select #type class="form-control">
+      <option *ngFor="let t of types" value={{t}}>
+        {{t}}
+      </option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Food Name</label>
+    <input #name type="text" class="form-control"/>
+  </div>
+  <div class="form-group">
+    <label>Address</label>
+    <input #name type="text" class="form-control"/>
+  </div>
+  <button (click)="addRestaurantBtn(type.value,name.value,address.value)">Submit</button>
+
+</div>

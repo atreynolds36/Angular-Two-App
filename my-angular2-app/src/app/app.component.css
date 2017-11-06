@@ -1,0 +1,39 @@
+agm-map{
+  position: absolute;
+  top : 0;
+  left : 0;
+  height: 100%;
+  width: 100%;
+}
+
+.app-container{
+  height:100%;
+  min-height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.app-container > div{
+  flex: 1 1 auto;
+  position : relative;
+}
+
+.app-container > header, .app-container > footer{
+  flex: 0 1 auto;
+}
+.app-container > footer {
+  position: fixed;
+  bottom : 0;
+  height : 10px;
+  width: 100%;
+  background-color: gray;
+}
+
+.custom-typeahead{
+  position: fixed;
+  margin-left: -150px;
+  width: 150px;
+  margin-top: 25px;
+  z-index: 5;
+  background-color: white;
+}

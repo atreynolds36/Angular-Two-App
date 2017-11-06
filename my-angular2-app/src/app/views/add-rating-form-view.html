@@ -1,0 +1,17 @@
+<div>
+  <label>Restaurant</label>
+  <select #rest >
+    <option *ngFor="let r of restaurants" value={{r._id}}>
+      {{r.name}}
+    </option>
+  </select>
+  <label>Food</label>
+  <input #food type="text"/>
+  <label>Grade</label>
+  <input #grade type="text"/>
+  <label>Date</label>
+  <input #date type="text"/>
+  <label>Price</label>
+  <input #price type="text"/>
+  <button (click)="addRatingBtn(food.value,rest.value,grade.value,date.value,price.value)">Submit</button>
+</div>

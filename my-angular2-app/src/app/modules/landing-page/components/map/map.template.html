@@ -1,0 +1,13 @@
+<div style="height:100%;width:100%; position : absolute">
+  <h4>Map View IS THIS Comp</h4>
+
+  <ul *ngFor="let res of results">
+    {{res.grade}}
+    {{res.restaurant}}
+  </ul>
+
+  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+    <krv-marker *ngFor="let marker of markers" [marker]="marker">
+    </krv-marker>
+  </agm-map>
+</div>

@@ -1,0 +1,9 @@
+<div>
+  {{ratingList[0].food}} is top rated at {{ratingList[0].score}}
+  <button (click)="showFn()" *ngIf="ratingList.length > 1">+</button>
+  <div *ngIf="showMore">
+    <li *ngFor="let rating of ratingList">
+      {{rating.score}}  -   {{rating.food}}
+    </li>
+  </div>
+</div>
