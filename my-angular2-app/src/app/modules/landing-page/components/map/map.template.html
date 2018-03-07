@@ -7,7 +7,14 @@
   </ul>
 
   <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-    <krv-marker *ngFor="let marker of markers" [marker]="marker">
-    </krv-marker>
+    <div *ngIf="listType == MarkerType.RESTAURANT">
+      <h1>WE ARE OK</h1>
+      <krv-restaurant-marker *ngFor="let marker of markers" [marker]="marker">
+      </krv-restaurant-marker>
+    </div>
+    <div *ngIf="listType == MarkerType.RATINGS">
+      <krv-rating-marker *ngFor="let marker of markers" [marker]="marker">
+      </krv-rating-marker>
+    </div>
   </agm-map>
 </div>

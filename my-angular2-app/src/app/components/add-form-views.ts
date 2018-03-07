@@ -3,7 +3,11 @@ import {Component, OnInit} from '@angular/core';
 import { Api } from '../services/api.service';
 import { GoogleGeoCodeApi } from '../services/google.maps.api.service';
 
-import { Restaurant } from '../types/db_objects';
+import {LatLng , LatLngBounds} from '@agm/core/services/google-maps-types';
+
+import {FormControl } from '@angular/forms';
+import { Restaurant } from '../types/API_Consumption_Types';
+import {Observable , Subject } from "rxjs";
 @Component({
   selector: 'add-rating-view',
   templateUrl: '../views/add-rating-form-view.html',
@@ -11,7 +15,25 @@ import { Restaurant } from '../types/db_objects';
 })
 export class AddRatingView implements OnInit{
   restaurants : Restaurant[];
-  constructor( private api : Api){
+
+  autoCompleteObservable : Observable<any>;
+  // initial center position for the map
+  lat: number = 40.743991;
+  lng: number = -74.032363;
+
+  restaurantSearchTerm$ = new Subject<string>();
+  description : string = "description";
+
+  constructor( private api : Api  , private googleApi : GoogleGeoCodeApi ){
+    console.log('construction');
+    /*
+    this.googleApi.handlePlacesAutoComplete( this.restaurantSearchTerm$ )
+      .subscribe( (res) => {
+        console.log(res);
+      })*/
+
+    this.autoCompleteObservable = this.googleApi.handlePlacesAutoComplete( this.restaurantSearchTerm$ );
+
   }
 
   ngOnInit() : void {
@@ -19,13 +41,15 @@ export class AddRatingView implements OnInit{
     this.api
       .getAllRestaurants()
       .then( res => this.restaurants = res );
+
+
   }
 
-  addRatingBtn(food,resId,grade,date,price) : void{
+  addRatingBtn(restaurantPlaceId,food,grade,date,price) : void{
     this.api
       .postAddRating({
-        food_name : food,
-        restaurant_id : resId,
+        google_place_id : restaurantPlaceId,
+        food_name       : food,
         grade : grade,
         date : date,
         price_range : price

@@ -1,5 +1,8 @@
+//Should match API_Outbound Server interface
+
 export interface Restaurant{
-  _id : number
+  _id : number;
+  averageScore : number;
   name : string,
   type : string,
   address : string,
@@ -9,14 +12,19 @@ export interface Restaurant{
 }
 
 export interface Rating{
-  count : number,
-  food : string,
-  score : number,
+  count : number;
   lastRated : Date,
-  restaurant : string,
-  lat : number,
-  lng : number,
-  address : string
+  userId : number,
+  price : number,
+  food  : string
+  score : number;
+  restaurant : {
+    id : number,
+    lat : number,
+    lng : number,
+    address : string,
+    name : string
+  }
 }
 
 export interface MasterData{
@@ -30,3 +38,5 @@ export interface APIQueryResults{
   },
   results : Array<Restaurant> | Array<Rating>
 }
+
+

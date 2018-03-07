@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule , XHRBackend , RequestOptions , Http , XSRFStrategy , BrowserXhr , ResponseOptions } from '@angular/http';
+import { HttpModule , XHRBackend , RequestOptions , Http , XSRFStrategy , BrowserXhr , ResponseOptions , JsonpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { AddRatingView , AddRestaurantView , AddMealView } from './components/add-form-views';
+import { MyTypeahead } from './components/typeahead/typeahead';
 
 import { Api } from './services/api.service';
 import { GoogleGeoCodeApi } from './services/google.maps.api.service';
@@ -15,6 +16,9 @@ import {ExternalApiXsrfStrategy, ExternalHttp, ExternalXHRBackend} from './confi
 import { AlertModule  } from 'ngx-bootstrap';
 
 import { LandingPageModule } from './modules/landing-page/landing-page.module';
+
+import { DataStore } from './services/global.datastore.service';
+import {SharedServicesModule} from "./modules/shared-services/shared-services.module";
 
 
 //Needed for AoT Compiler
@@ -34,19 +38,20 @@ export const ExternalHttpFactory = function(_backend , _requestOptions){
 @NgModule({
   declarations: [
     AppComponent,
-    AddRatingView,AddRestaurantView,AddMealView,
+    AddRatingView,AddRestaurantView,AddMealView, MyTypeahead
   ],
   imports: [
+    SharedServicesModule,
     BrowserModule, LandingPageModule,
     FormsModule,
-    HttpModule,
+    HttpModule, JsonpModule,
     AppRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBGl1fMQneNqJqqco8G-Ptluhm7qkd01B8'
     }),
     AlertModule.forRoot()
   ],
-  providers: [ Api , GoogleGeoCodeApi ,
+  providers: [ Api , GoogleGeoCodeApi , // DataStore,
     {
       provide : ExternalApiXsrfStrategy,
       //useFactory : () => {

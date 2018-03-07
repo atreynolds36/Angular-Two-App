@@ -6,11 +6,6 @@ import { Router , Request , Response } from 'express';
  */
 
 import { Connector } from '../Database_Connect/connect';
-
-import { Restaurant_Schema , Ratings_Schema, Meals_Schema } from '../types/API_Incoming_Payload';
-
-import { QueryResponse } from '../types/response-structures';
-
 import { BaseQueryHandler } from './QueryEndpoint/base';
 
 import { QueryResults } from './Shim/query-results';
@@ -49,7 +44,7 @@ export class QUERYRouter{
         GET Ratings by Restaurant Id
      */
 
-    private getQueryRatings(req : Request , res : Response ){
+    private getQueryRatings(req : Request , res : express.Response ){
         let params = req.query;
         let handler = RatingsQueryHandler(params.filter);
         if(handler){
@@ -64,7 +59,7 @@ export class QUERYRouter{
         }
     }
 
-    private getQueryRestaurantsAll(req : Request, res : Response ){
+    private getQueryRestaurantsAll(req : Request, res : express.Response ){
         this.connector.queryAll('central.db' , ((err, results ) => {
             if(err)
                 res.status(404).send({ error : err.message} );
@@ -77,7 +72,7 @@ export class QUERYRouter{
         Get restaurants in the area
      */
 
-    private getQueryRestaurants(req : Request , res : Response ){
+    private getQueryRestaurants(req : Request , res : express.Response ){
         let params = req.query;
         //let handler = this.restaurantQueryHandler.getQueryHandler(params.filter);
         let handler = RestaurantQueryHandler(params.filter);
@@ -93,7 +88,7 @@ export class QUERYRouter{
         }
     }
 
-    private queryAllRestaurants(req: Request, res : Response ){
+    private queryAllRestaurants(req: Request, res : express.Response ){
         this.connector.queryAll('central.db' , (err, docs) => {
             if(err)
                 res.status(400).send({ error : true });

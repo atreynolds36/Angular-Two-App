@@ -13,6 +13,7 @@
 import { BaseQueryHandler , BaseQueryHandlerInterface} from '../base';
 
 import fns from './ReusableQueryFunctions';
+import {RestaurantDO} from "../../../DataObjects/Restaurant";
 
 
 export class AreaTopRatedQuery extends BaseQueryHandler implements BaseQueryHandlerInterface {
@@ -24,7 +25,7 @@ export class AreaTopRatedQuery extends BaseQueryHandler implements BaseQueryHand
         let passValidation = this.validate(params);
         if (passValidation) {
             let query = fns.getCloseAreaQuery(params.lat, params.lng );
-            this.getDataByQuery(query , (err, results ) => {
+            this.getDataByQuery(query , (err, results : Array<RestaurantDO> ) => {
                 if(err)
                     callback(err);
                 else{
@@ -38,21 +39,15 @@ export class AreaTopRatedQuery extends BaseQueryHandler implements BaseQueryHand
         }
     }
 
-    //processAndSort(results : Array<DbRestaurant>) : Array<DbRestaurant>{
-    processAndSort( results : Array<any> ) : Array<any>{
-        let tempCount , tempScore;
-        for (let node of results){
-            tempCount = 0; tempScore = 0;
-            for(let rating of node.ratings){
-                tempCount += rating.count;
-                tempScore += (rating.score * rating.count);
-            }
-            node.totalCount = tempCount;
-            node.scoreAverage = tempScore / tempCount;
-            if(node.ratings)
-                fns.quickSort(node.ratings , 'score' , 0 , node.ratings.length - 1 );
+    processAndSort( results : Array<RestaurantDO> ) : Array<RestaurantDO>{
+        let readyToOutResults : Array<PublicRestaurant> = results.map( ( restaurant ) => {
+            return restaurant.getAPIOutgoingStructure();
+        })
+        for (let res of readyToOutResults ){
+            if( res.ratings)
+                fns.quickSort(res.ratings , 'score' , 0 , res.ratings.length - 1 );
         }
-        return fns.quickSort(results, 'scoreAverage' , 0 , results.length - 1 );
+        return fns.quickSort( readyToOutResults , 'averageScore' , 0 , results.length - 1 );
     }
 
 

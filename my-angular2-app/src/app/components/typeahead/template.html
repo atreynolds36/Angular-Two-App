@@ -1,0 +1,31 @@
+<div>
+  <ul class="nav nav-pills select-render-nav form-control nav-mixed single-option">
+    <li>
+      <input ng-hide="$hideFilter" no-validate="true" type="text"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             placeholder="{{placeholder}}" class="select-input ng-pristine ng-valid ng-scope ng-empty ng-touched form-control"
+             role="combobox" aria-expanded="true" aria-autocomplete="list" style="max-width:100%;" maxlength="30"
+             (keyup)="subject.next($event.target.value)"
+             (focus)="onFocus()"
+             (focusout)="onFocusOut($event)"
+             [(ngModel)]="foodType"
+           >
+    </li>
+  </ul>
+
+  <div *ngIf="focus" (focusout)="onFocusOut()"
+       role="listbox" class="listbox-panel pop-master select show-tick bottom-left fastest sing"
+       style="display:block;top:35px;left:15px;width:100%;">
+    <ul class="ng-pristine ng-untouched ng-valid ng-scope listbox ng-empty">
+      <li *ngIf="(focus && ! results) " style="background-color: #f8fafe" class="ng-scope select-option">
+        <span><i>Search...</i></span>
+        <span class="spin-icon fu-spinner-fan spin"></span>
+      </li>
+    </ul>
+    <div class="scrollable scrollable-y">
+      <ul class="ng-pristine ng-untouched ng-valid ng-scope listbox ng-empty" *ngFor="let data of results" (mousedown)="setFoodType(data)">
+        <li class="ng-scope select-option"><span><i class="flag flag-ae">{{data[key]}}</i></span></li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -20,7 +20,6 @@ export class CoordinateQueryHandler extends BaseQueryHandler implements BaseQuer
     execute(params, callback: (err, data ?: any) => void): void {
         let passValidation = this.validate(params);
         if (passValidation) {
-            //let query = this.buildQuery(params.lat, params.lng);
             let query = fns.getCloseAreaQuery(params.lat, params.lng );
             this.getDataByQuery(query , (err, results ) => {
                 if(err)

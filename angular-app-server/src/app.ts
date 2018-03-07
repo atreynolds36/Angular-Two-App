@@ -4,10 +4,11 @@ import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as path from "path";
 
-import { CreateRouter} from './API/create';
+import { CreateRouter} from './API/POST/create';
 import { QUERYRouter} from './API/query';
 import { ModifyRouter } from './API/modify';
 import { MasterDataRouter } from './API/master-data';
+import { GoogleAPIConnector } from './API/google-api-connect';
 /**
  * The server.
  *
@@ -59,6 +60,7 @@ export class Server {
         this.app.use('/query' , QUERYRouter.bootstrap() );
         this.app.use('/update' , ModifyRouter.bootstrap() );
         this.app.use('/masterdata' , MasterDataRouter.bootstrap() );
+        this.app.use('/google-api' , GoogleAPIConnector.bootstrap() );
         //if doesnt match any route - return 404
         this.app.use((req, res, next) => {
             let err : APIError = <APIError>new Error('Not Found');

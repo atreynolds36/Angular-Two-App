@@ -24,20 +24,14 @@ class AreaTopRatedQuery extends base_1.BaseQueryHandler {
         }
     }
     processAndSort(results) {
-        let tempCount, tempScore;
-        for (let node of results) {
-            tempCount = 0;
-            tempScore = 0;
-            for (let rating of node.ratings) {
-                tempCount += rating.count;
-                tempScore += (rating.score * rating.count);
-            }
-            node.totalCount = tempCount;
-            node.scoreAverage = tempScore / tempCount;
-            if (node.ratings)
-                ReusableQueryFunctions_1.default.quickSort(node.ratings, 'score', 0, node.ratings.length - 1);
+        let readyToOutResults = results.map((restaurant) => {
+            return restaurant.getAPIOutgoingStructure();
+        });
+        for (let res of readyToOutResults) {
+            if (res.ratings)
+                ReusableQueryFunctions_1.default.quickSort(res.ratings, 'score', 0, res.ratings.length - 1);
         }
-        return ReusableQueryFunctions_1.default.quickSort(results, 'scoreAverage', 0, results.length - 1);
+        return ReusableQueryFunctions_1.default.quickSort(readyToOutResults, 'averageScore', 0, results.length - 1);
     }
     validate(params) {
         if (params.lat && params.lng)

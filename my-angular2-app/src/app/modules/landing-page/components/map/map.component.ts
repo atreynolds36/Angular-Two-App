@@ -1,7 +1,7 @@
 import {Component, OnInit , Input } from '@angular/core';
 
 import { Api } from '../../../../services/api.service';
-import { Restaurant , Rating } from '../../../../types/db_objects';
+import { Restaurant , Rating } from '../../../../types/API_Consumption_Types';
 import { DisplayListType} from '../../enums/index';
 
 @Component({
@@ -20,6 +20,7 @@ export class MapComponent implements OnInit{
 
   @Input() restaurantList : Restaurant[];
   @Input() ratingsList : Rating[];
+  MarkerType : typeof DisplayListType = DisplayListType;
   @Input() listType : DisplayListType;
 
   // initial center position for the map
@@ -46,6 +47,7 @@ export class MapComponent implements OnInit{
         res.lng = Number(res.lng);
         return res;
       });
+      console.log(this.markers.length);
     }
   }
 

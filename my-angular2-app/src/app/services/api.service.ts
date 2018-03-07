@@ -3,13 +3,15 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Restaurant , Rating , MasterData } from '../types/db_objects';
+import { Restaurant , Rating , MasterData } from '../types/API_Consumption_Types';
 
 const apiEndpoint = 'http://localhost:2041';
 
 @Injectable()
 export class Api{
-  constructor( private http : Http ){}
+  constructor( private http : Http ){
+    console.log('api construction');
+  }
 
   getTopRatedRestaurantsInArea(lat : Number , lng : Number ) : Promise<Restaurant[]>{
     let queryStr : String = 'filter=topInArea&lat=' + lat + "&lng=" + lng;

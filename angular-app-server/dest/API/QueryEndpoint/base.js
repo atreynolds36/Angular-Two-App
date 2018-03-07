@@ -9,8 +9,8 @@ class BaseQueryHandler {
         callback({ codeFailure: 'Lack of execute function within query class' });
     }
     getDataByQuery(query, callback) {
-        this.connector.query('central.db', query, (err, results) => {
-            console.log('query res length ' + results.length);
+        this.connector.centralQuery(query, (err, results) => {
+            console.log('query res length ' + results && results.length);
             if (err)
                 callback(err);
             else

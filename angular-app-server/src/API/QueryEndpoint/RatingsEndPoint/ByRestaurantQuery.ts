@@ -1,9 +1,6 @@
 /**
  * Created by areynolds2 on 10/20/2017.
  */
-/**
- * Created by areynolds2 on 10/19/2017.
- */
 
 /*
  Handles endpoint
@@ -11,10 +8,6 @@
  */
 
 import { BaseQueryHandler , BaseQueryHandlerInterface} from '../base';
-
-//import fns from './ReusableQueryFunctions';
-
-
 export class ByRestaurantQuery extends BaseQueryHandler implements BaseQueryHandlerInterface {
     constructor() {
         super();

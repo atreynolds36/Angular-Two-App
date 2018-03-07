@@ -1,17 +1,30 @@
-<div>
-  <label>Restaurant</label>
-  <select #rest >
-    <option *ngFor="let r of restaurants" value={{r._id}}>
-      {{r.name}}
-    </option>
-  </select>
-  <label>Food</label>
-  <input #food type="text"/>
-  <label>Grade</label>
-  <input #grade type="text"/>
-  <label>Date</label>
-  <input #date type="text"/>
-  <label>Price</label>
-  <input #price type="text"/>
-  <button (click)="addRatingBtn(food.value,rest.value,grade.value,date.value,price.value)">Submit</button>
+<div class="center-form">
+  <div class="form-group">
+    <label>Restaurant</label>
+    <my-typeahead
+                  #typeaheadValue
+                  [subject]="restaurantSearchTerm$"
+                  [observeResults]="autoCompleteObservable"
+                  [key]="description"
+                  [placeholder]="'Find Restaurant'"
+                  (inputChange)="typeaheadValue.value=$event.place_id">
+    </my-typeahead>
+  </div>
+  <div class="form-group">
+    <label>Food</label>
+    <input class="form-control"  #food type="text"/>
+  </div>
+  <div class="form-group">
+    <label>Grade</label>
+    <input class="form-control" #grade type="text"/>
+  </div>
+  <div>
+    <label>Date</label>
+    <input class="form-control" #date type="text"/>
+  </div>
+  <div>
+    <label>Price</label>
+    <input class="form-control" #price type="text"/>
+  </div>
+  <button (click)="addRatingBtn(typeaheadValue.value,food.value,grade.value,date.value,price.value)">Submit</button>
 </div>

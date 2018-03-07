@@ -29,6 +29,7 @@ exports.MongoDocument = MongoDocument;
 class Restaurant extends MongoDocument {
     constructor(payload) {
         super();
+        this.gid = payload.gid;
         this.name = payload.name;
         this.type = payload.type;
         this.address = payload.address;
@@ -44,8 +45,17 @@ class Rating extends MongoDocument {
         this.food_name = payload.food_name && payload.food_name.toUpperCase();
         this.grade = parseInt(payload.grade);
         this.price_range = parseInt(payload.price_range);
-        this.restaurant_id = payload.restaurant_id;
         this.date = this.isValidDate(payload.date) ? new Date(payload.date) : undefined;
+        this.userId = payload.id || 1;
+    }
+    get() {
+        return {
+            food: this.food_name,
+            score: this.grade,
+            rateDate: this.date,
+            userId: this.userId,
+            price: this.price_range
+        };
     }
 }
 exports.Rating = Rating;

@@ -3,8 +3,7 @@
  */
 import {Component , OnChanges , OnInit , Input } from '@angular/core';
 
-import { Restaurant , Rating } from '../../../../types/db_objects';
-import { Api } from '../../../../services/api.service';
+import { Restaurant , Rating } from '../../../../types/API_Consumption_Types';
 
 import { LandingPageApiService } from '../../services/landing-page.api.service';
 import {LandingPageDataHub} from "../../services/landing-page-data-hub.service";

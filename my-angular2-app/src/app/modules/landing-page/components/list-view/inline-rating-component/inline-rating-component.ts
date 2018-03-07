@@ -4,7 +4,7 @@
 
 import {Component , Input } from '@angular/core';
 
-import { Rating } from '../../../../../types/db_objects';
+import { Rating } from '../../../../../types/API_Consumption_Types';
 
 @Component({
   selector: 'list-item-rating-component',

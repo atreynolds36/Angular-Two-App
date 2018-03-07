@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const express = require("express");
-const create_1 = require("./API/create");
+const create_1 = require("./API/POST/create");
 const query_1 = require("./API/query");
 const modify_1 = require("./API/modify");
 const master_data_1 = require("./API/master-data");
+const google_api_connect_1 = require("./API/google-api-connect");
 class Server {
     static bootstrap() {
         return new Server();
@@ -29,6 +30,7 @@ class Server {
         this.app.use('/query', query_1.QUERYRouter.bootstrap());
         this.app.use('/update', modify_1.ModifyRouter.bootstrap());
         this.app.use('/masterdata', master_data_1.MasterDataRouter.bootstrap());
+        this.app.use('/google-api', google_api_connect_1.GoogleAPIConnector.bootstrap());
         this.app.use((req, res, next) => {
             let err = new Error('Not Found');
             err.status = 404;

@@ -7,11 +7,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {ListViewComponent} from './components/list-view/list-view.component';
 import { MapComponent } from './components/map/map.component';
 import { MainComponent } from './components/main/main.component';
+import {UserReviewListComponent} from "./components/user-list-page/user-review-list.component";
 
 
 
 export const routes: Routes = [
-  { path: 'search', component: MainComponent }
+  { path: 'search', component: MainComponent },
+  { path : 'userlist' , component : UserReviewListComponent }
 ];
 
 @NgModule({

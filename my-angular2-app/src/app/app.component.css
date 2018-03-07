@@ -37,3 +37,8 @@ agm-map{
   z-index: 5;
   background-color: white;
 }
+
+.center-form{
+  width: 50%;
+  margin: auto;
+}

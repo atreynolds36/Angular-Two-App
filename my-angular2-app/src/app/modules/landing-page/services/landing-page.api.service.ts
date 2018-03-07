@@ -3,7 +3,7 @@
  */
 import { Injectable , EventEmitter }     from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Restaurant , Rating , APIQueryResults}           from '../../../types/db_objects';
+import { Restaurant , Rating , APIQueryResults}           from '../../../types/API_Consumption_Types';
 import {Observable} from 'rxjs/Rx';
 
 // Import RxJs required methods
@@ -20,9 +20,13 @@ export class LandingPageApiService {
   onGetRestaurantList : EventEmitter< Restaurant[] > = new EventEmitter();
   onGetRatingsList : EventEmitter<Rating[]> = new EventEmitter();
 
+  getRatingsByUser( userid : number) : Observable<Response>{
+    let queryStr : string = "filter=byUser&userId=" + userid;
+    return this.http.get(this.apiEndpoint + "/query/ratings?" + queryStr);
+  }
 
 
-  getTopRatedRestaurantsInArea(lat : Number , lng : Number ) : Observable<Restaurant[]>{
+  getTopRatedRestaurantsInArea(lat : number , lng : number ) : Observable<Restaurant[]>{
     let queryStr : String = 'filter=topInArea&lat=' + lat + "&lng=" + lng;
     return this.http.get(this.apiEndpoint + "/query/restaurants?" + queryStr)
       .map( (res : Response ) => {
@@ -32,7 +36,7 @@ export class LandingPageApiService {
       .catch(this.handleError);
   }
 
-  getRestaurantsByType( type : string , lat : Number , lng : Number ) : Observable<Restaurant[]> {
+  getRestaurantsByType( type : string , lat : number , lng : number ) : Observable<Restaurant[]> {
     let queryStr : String = 'filter=foodType&type=' + type + '&lat=' + lat + "&lng=" + lng;
     return this.http.get(this.apiEndpoint + "/query/restaurants?" + queryStr)
       .map( ( res : Response ) => {
@@ -42,7 +46,7 @@ export class LandingPageApiService {
       .catch(this.handleError);
   }
 
-  getRatingsByFoodType( type : string , lat : Number , lng : Number ) : Observable<Rating[]> {
+  getRatingsByFoodType( type : string , lat : number , lng : number ) : Observable<Rating[]> {
     let queryStr : String = 'filter=foodType&food=' + type + '&lat=' + lat + "&lng=" + lng;
     return this.http.get(this.apiEndpoint + "/query/ratings?" + queryStr)
       .map( (res : Response) => res.json().results as Rating[] )

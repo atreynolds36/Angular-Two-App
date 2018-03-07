@@ -2,10 +2,10 @@
 <table class="table" style="background-color: white">
   <tr *ngFor="let rating of ratingsList">
     <td>{{rating.score}}</td>
-    <td>{{rating.count}}</td>
+    <td>{{rating.food}}</td>
     <td>
-      <div>{{rating.restaurant}}</div>
-      <i style="margin-left:10px">{{rating.address}}</i>
+      <div>{{rating.restaurant.name}}</div>
+      <i style="margin-left:10px">{{rating.restaurant.address}}</i>
     </td>
   </tr>
 </table>

@@ -4,7 +4,7 @@
 import {Component, OnInit , Output , EventEmitter } from '@angular/core';
 
 import { Api } from '../../../../../services/api.service';
-import { MasterData } from '../../../../../types/db_objects';
+import { MasterData } from '../../../../../types/API_Consumption_Types';
 
 @Component({
   selector: 'crv-typeahead',

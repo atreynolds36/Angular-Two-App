@@ -6,3 +6,13 @@ export enum DisplayListType{
   RESTAURANT,
   RATINGS
 }
+
+export enum ActivePanel {
+  FOOD,
+  CUISINE
+}
+
+export enum ActiveComponentEnum{
+  MAP,
+  LIST
+}

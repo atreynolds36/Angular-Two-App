@@ -9,21 +9,6 @@ exports.default = {
         return { lat: { $lt: lat + .2, $gt: lat - .2 }, lng: { $lt: lng + .2, $gt: lng - .2 } };
     },
     quickSort: quickSort,
-    filterRatingsByFoodName: (results, food_name) => {
-        let ratingsList = [];
-        for (let res of results) {
-            for (let rating of res.ratings) {
-                if (rating.food == food_name.toUpperCase()) {
-                    rating.restaurant = res.name;
-                    rating.lat = res.lat;
-                    rating.lng = res.lng;
-                    rating.address = res.address;
-                    ratingsList.push(rating);
-                }
-            }
-        }
-        return ratingsList;
-    }
 };
 function quickSort(arr, sortField, left, right) {
     var len = arr.length, pivot, partitionIndex;

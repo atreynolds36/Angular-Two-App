@@ -3,7 +3,7 @@
  */
 import { Injectable , EventEmitter }     from '@angular/core';
 import { LandingPageApiService } from './landing-page.api.service';
-import {Rating, Restaurant } from "../../../types/db_objects";
+import {Rating, Restaurant } from "../../../types/API_Consumption_Types";
 
 import {Observable, Subject} from 'rxjs/Rx';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
@@ -26,7 +26,22 @@ export class LandingPageDataHub{
     restaurantList : Restaurant[];
     ratingsList : Rating[];
 
-    listUpdate
+    userRatingsList : Rating[];
+    userObservable : Observable<Rating[]>;
+
+    getUserRatingsList( userid : number ) : Observable<Rating[]>{
+      if( this.userRatingsList ) {
+        return Observable.of( this.userRatingsList );
+      }else if( this.userObservable ){
+        return this.userObservable
+      }else{
+        return this.api.getRatingsByUser( userid ).map( (res) => {
+          this.userRatingsList = res.json().results as Rating[];
+          return this.userRatingsList;
+        });
+      }
+    }
+
 
     private subject = new Subject< Restaurant[] >();
 

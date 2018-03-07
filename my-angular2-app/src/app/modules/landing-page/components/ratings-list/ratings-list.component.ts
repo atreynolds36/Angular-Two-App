@@ -3,7 +3,7 @@
  */
 import {Component , OnChanges , OnInit , Input } from '@angular/core';
 
-import { Restaurant , Rating } from '../../../../types/db_objects';
+import { Restaurant , Rating } from '../../../../types/API_Consumption_Types';
 
 @Component({
   selector: 'ratings-list-component',
@@ -11,7 +11,6 @@ import { Restaurant , Rating } from '../../../../types/db_objects';
 })
 export class RatingsListComponent implements OnChanges {
   @Input() ratingsList : Rating[];
-  myList : Rating[];
   constructor(){
 
   }

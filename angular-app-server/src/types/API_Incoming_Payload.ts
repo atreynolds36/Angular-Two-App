@@ -28,7 +28,6 @@ export interface RestaurantInterface{
 }
 
 export interface RatingInterface{
-    restaurant_id : string,
     food_name : string,
     grade : number,
     price_range : number,
@@ -58,9 +57,13 @@ export class Restaurant extends MongoDocument implements RestaurantInterface{
     address : string;
     lat : number;
     lng : number;
+    _id : Object;
+    gid : string;
+    cuisineTypesArray : Array<string>;
     ratings : Array<Rating>;
     constructor( payload : any ){
         super();
+        this.gid = payload.gid;
         this.name = payload.name;
         this.type = payload.type;
         this.address = payload.address;
@@ -75,13 +78,24 @@ export class Rating extends MongoDocument implements RatingInterface{
     grade : number;
     price_range : number;
     date : Date;
-    restaurant_id : string;
+    userId : number;
     constructor(payload : any){
         super();
         this.food_name = payload.food_name && payload.food_name.toUpperCase();
         this.grade = parseInt(payload.grade);
         this.price_range = parseInt(payload.price_range);
-        this.restaurant_id = payload.restaurant_id;
         this.date = this.isValidDate(payload.date) ? new Date(payload.date) : undefined;
+        //default to 1
+        this.userId = payload.id || 1 ;
+    }
+
+    get() : Object {
+        return {
+            food : this.food_name,
+            score : this.grade,
+            rateDate : this.date,
+            userId : this.userId,
+            price : this.price_range
+        }
     }
 }
