@@ -30,7 +30,6 @@ export class MapComponent implements OnInit{
   constructor( private api : Api ){}
 
   ngOnInit() : void {
-    //this.performSearch();
     console.log( this.listType );
 
     this.transformInputList();

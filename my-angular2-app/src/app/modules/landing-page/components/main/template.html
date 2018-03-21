@@ -21,8 +21,8 @@
     </div>
     <div *ngIf="this.panel == ActivePanel.CUISINE">
       <select class="form-control" #searchFoodType >
-        <option *ngFor="let t of types" value={{t}}>
-          {{t}}
+        <option *ngFor="let t of types" value={{t.value}}>
+          {{t.label}}
         </option>
       </select>
       <button (click)="searchByCuisine( searchFoodType.value )">Go</button>

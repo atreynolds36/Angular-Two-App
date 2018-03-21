@@ -49,7 +49,9 @@ export class MainComponent extends AbstractListPageClass {//implements OnInit {
 
   searchByCuisine( type ) : void {
     console.log('search by ttpe');
-    this.datahub.getRestautantsByCusine(type, this.lat, this.lng )
+
+
+    this.newApi.getRestautantsByCusine(type, this.lat, this.lng )
       .subscribe( (list) => {
         this.activeList = DisplayListType.RESTAURANT;
         this.restaurantList = list

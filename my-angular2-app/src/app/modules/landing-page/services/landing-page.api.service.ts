@@ -46,6 +46,17 @@ export class LandingPageApiService {
       .catch(this.handleError);
   }
 
+  getRestautantsByCusine(type : string , lat : number, lng : number ){
+    let queryStr : String = 'filter=foodType&type=' + type + '&lat=' + lat + "&lng=" + lng;
+    return this.http.get(this.apiEndpoint + "/query/restaurants?" + queryStr)
+      .map( ( res : Response ) => {
+        let results = res.json().results as Restaurant[];
+        this.onGetRestaurantList.emit( results );
+        return results;
+      })
+      .catch(this.handleError);
+  }
+
   getRatingsByFoodType( type : string , lat : number , lng : number ) : Observable<Rating[]> {
     let queryStr : String = 'filter=foodType&food=' + type + '&lat=' + lat + "&lng=" + lng;
     return this.http.get(this.apiEndpoint + "/query/ratings?" + queryStr)

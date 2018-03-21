@@ -65,16 +65,6 @@ export class LandingPageDataHub{
       }
     }
 
-    getRestautantsByCusine(type : string , lat : number, lng : number ){
-      let queryStr : String = 'filter=foodType&type=' + type + '&lat=' + lat + "&lng=" + lng;
-      return this.http.get(this.apiEndpoint + "/query/restaurants?" + queryStr)
-        .map( ( res : Response ) => {
-          this.restaurantList = res.json().results as Restaurant[];
-          return this.restaurantList;
-        })
-        .catch(this.handleError);
-    }
-
 
     dataListEmitter : EventEmitter< Restaurant[] > = new EventEmitter();
 
