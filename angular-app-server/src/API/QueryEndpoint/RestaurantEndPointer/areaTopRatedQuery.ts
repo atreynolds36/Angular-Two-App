@@ -29,7 +29,7 @@ export class AreaTopRatedQuery extends BaseQueryHandler implements BaseQueryHand
                 if(err)
                     callback(err);
                 else{
-                    let processedResults = this.processAndSort(results);
+                    let processedResults = fns.processAndSortRestaurantsByScore(results);
                     callback(null, processedResults);
                 }
             });
@@ -38,19 +38,6 @@ export class AreaTopRatedQuery extends BaseQueryHandler implements BaseQueryHand
             callback({validationFailed: 'true'});
         }
     }
-
-    processAndSort( results : Array<RestaurantDO> ) : Array<RestaurantDO>{
-        let readyToOutResults : Array<PublicRestaurant> = results.map( ( restaurant ) => {
-            return restaurant.getAPIOutgoingStructure();
-        })
-        for (let res of readyToOutResults ){
-            if( res.ratings)
-                fns.quickSort(res.ratings , 'score' , 0 , res.ratings.length - 1 );
-        }
-        return fns.quickSort( readyToOutResults , 'averageScore' , 0 , results.length - 1 );
-    }
-
-
 
     validate(params) {
         if (params.lat && params.lng)

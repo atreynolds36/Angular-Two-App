@@ -1,3 +1,5 @@
+import {RestaurantDO} from "../../../DataObjects/Restaurant";
+
 /**
  * Created by areynolds2 on 10/20/2017.
  */
@@ -12,7 +14,18 @@ export default {
         return {lat: {$lt: lat + .2, $gt: lat - .2}, lng: {$lt: lng + .2, $gt: lng - .2}};
     },
     quickSort : quickSort,
+    processAndSortRestaurantsByScore : processAndSort
+}
 
+function processAndSort( results : Array<RestaurantDO> ) : Array<RestaurantDO>{
+    let readyToOutResults : Array<PublicRestaurant> = results.map( ( restaurant ) => {
+    return restaurant.getAPIOutgoingStructure();
+    });
+    for (let res of readyToOutResults ){
+        if( res.ratings)
+            quickSort(res.ratings , 'score' , 0 , res.ratings.length - 1 );
+    }
+    return quickSort( readyToOutResults , 'averageScore' , 0 , results.length - 1 );
 }
 
 function quickSort(arr, sortField , left, right){

@@ -41,7 +41,7 @@ export class ModifyRouter{
         this.updateHandler(req,res, 'ratings' , ratingToModify , req.params.id);
     }
 
-    private updateHandler(req: Request, res : Response , collection : string , document : MongoDocument , id : string ){
+    private updateHandler(req: Request, res : express.Response , collection : string , document : MongoDocument , id : string ){
         if( document.validate() ){
             this.connector.update(collection , id , document , (err, newDoc) => {
                 if(err)

@@ -9,7 +9,18 @@ exports.default = {
         return { lat: { $lt: lat + .2, $gt: lat - .2 }, lng: { $lt: lng + .2, $gt: lng - .2 } };
     },
     quickSort: quickSort,
+    processAndSort: processAndSort
 };
+function processAndSort(results) {
+    let readyToOutResults = results.map((restaurant) => {
+        return restaurant.getAPIOutgoingStructure();
+    });
+    for (let res of readyToOutResults) {
+        if (res.ratings)
+            quickSort(res.ratings, 'score', 0, res.ratings.length - 1);
+    }
+    return quickSort(readyToOutResults, 'averageScore', 0, results.length - 1);
+}
 function quickSort(arr, sortField, left, right) {
     var len = arr.length, pivot, partitionIndex;
     if (left < right) {

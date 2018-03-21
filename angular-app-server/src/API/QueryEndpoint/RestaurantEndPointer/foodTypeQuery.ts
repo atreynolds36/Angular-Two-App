@@ -17,12 +17,12 @@ export class FoodTypeQuery extends BaseQueryHandler implements BaseQueryHandlerI
         let passValidation = this.validate(params);
         if (passValidation) {
             let query : any = fns.getCloseAreaQuery(params.lat, params.lng );
-            query.type = params.type;
+            query.cuisineTypesArray = params.type;
             this.getDataByQuery(query , (err, results ) => {
                 if(err)
                     callback(err);
                 else{
-                    let processedResults = this.processAndSort(results);
+                    let processedResults = fns.processAndSortRestaurantsByScore(results);
                     callback(null, processedResults);
                 }
             });
@@ -31,24 +31,6 @@ export class FoodTypeQuery extends BaseQueryHandler implements BaseQueryHandlerI
             callback({validationFailed: 'true'});
         }
     }
-
-    processAndSort( results : Array<any> ) : Array<any>{
-        let tempCount , tempScore;
-        for (let node of results){
-            tempCount = 0; tempScore = 0;
-            for(let rating of node.ratings){
-                tempCount += rating.count;
-                tempScore += (rating.score * rating.count);
-            }
-            node.totalCount = tempCount;
-            node.scoreAverage = tempScore / tempCount;
-            if(node.ratings)
-                fns.quickSort(node.ratings , 'score' , 0 , node.ratings.length - 1 );
-        }
-        return fns.quickSort(results, 'scoreAverage' , 0 , results.length - 1 );
-    }
-
-
 
     validate(params) {
         if (params.lat && params.lng && params.type)

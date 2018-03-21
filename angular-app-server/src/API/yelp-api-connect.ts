@@ -16,22 +16,24 @@ export class YelpApiConnector{
     static async getRestaurantCusinesTypesByLatAndLngAndName( resName : string , lat : number ,lng : number ) : Promise< Array<string> > {
         return new Promise( ( resolve : (strs : Array<string> ) => void , rej : (err) => void ) => {
             request({
-                url : yelpApiUri + "?term=" + resName + "&latitude=" + lat + "&longitude=" + lng + "radius=20",
+                url : yelpApiUri + "?term=" + resName + "&latitude=" + lat + "&longitude=" + lng + "&radius=20",
                 headers : {
                     authorization : "Bearer " + token
                 }
             } , (err , res , body ) => {
                 if(err)
                     rej(err);
+                else if(body && body.error )
+                    rej( body.error );
                 else{
-                    let businesses = body.businesses;
+                    let businesses = JSON.parse( body ).businesses;
                     if( businesses.length == 0 ){
                         resolve( [] as Array<string> );
                     }else{
                         if( businesses.length > 1 ) {
                             console.error('Found more than one in area - possible issues');
                         }
-                        let types : Array<string> = body.businesses[0].categories.map( (kv ) => {
+                        let types : Array<string> = businesses[0].categories.map( (kv ) => {
                             return kv.alias;
                         });
                         resolve( types );

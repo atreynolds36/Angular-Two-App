@@ -16,15 +16,17 @@ class YelpApiConnector {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, rej) => {
                 request({
-                    url: yelpApiUri + "?term=" + resName + "&latitude=" + lat + "&longitude=" + lng + "radius=20",
+                    url: yelpApiUri + "?term=" + resName + "&latitude=" + lat + "&longitude=" + lng + "&radius=20",
                     headers: {
                         authorization: "Bearer " + token
                     }
                 }, (err, res, body) => {
                     if (err)
                         rej(err);
+                    else if (body && body.error)
+                        rej(body.error);
                     else {
-                        let businesses = body.businesses;
+                        let businesses = JSON.parse(body).businesses;
                         if (businesses.length == 0) {
                             resolve([]);
                         }
@@ -32,7 +34,7 @@ class YelpApiConnector {
                             if (businesses.length > 1) {
                                 console.error('Found more than one in area - possible issues');
                             }
-                            let types = body.businesses[0].categories.map((kv) => {
+                            let types = businesses[0].categories.map((kv) => {
                                 return kv.alias;
                             });
                             resolve(types);

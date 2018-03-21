@@ -7,6 +7,9 @@ import { Connector } from '../Database_Connect/connect';
 
 import { Restaurant_Schema , Ratings_Schema, Meals_Schema } from '../types/API_Incoming_Payload';
 
+
+const cuisineMongoCollectionName = 'Cuisine';
+const foodNamesMongoCollectionName = 'FoodMasterData';
 /*
  DEFINES THE /get API ROUTE
  */
@@ -30,26 +33,23 @@ export class MasterDataRouter{
         this.router.get('/food-types' , this.foodTypes.bind(this) );
     }
 
-    foodGenreRoute(req : Request, res : Response){
-        res.json([
-            "AMERICAN",
-            "CHINESE",
-            "ITALIAN",
-            "MEXICAN",
-            "SEAFOOD",
-            "MEDITERRANEAN",
-            "VIETNAMESE",
-            "JAPANESE"
-        ]);
+    foodGenreRoute(req : Request, res : express.Response ){
+        let filter = req.query.filter && req.query.filter.toLowerCase();
+        let expr = new RegExp(filter);
+        let filterQuery = { 'value' : expr  };
+        this.connector.filterMasterdata( cuisineMongoCollectionName , filterQuery , (err , values ?: any) => {
+            if(err)
+                res.status(400).send({ Error : 'In Masterdata'});
+            else
+                res.status(200).send(values)
+        });
     }
 
-
-
-    foodTypes(req : Request, res:Response){
+    foodTypes(req : Request, res : express.Response ){
         let filter = req.query.filter && req.query.filter.toUpperCase();
         let expr = new RegExp(filter);
         let filterQuery = { 'values' : expr };
-        this.connector.filterMasterdata('FoodMasterData' , filterQuery , (err , values ?: any) => {
+        this.connector.filterMasterdata( foodNamesMongoCollectionName , filterQuery , (err , values ?: any) => {
             if(err)
                 res.status(400).send({ Error : 'In Masterdata'});
             else

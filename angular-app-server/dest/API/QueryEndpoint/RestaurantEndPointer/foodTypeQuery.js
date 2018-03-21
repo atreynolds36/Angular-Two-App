@@ -10,12 +10,12 @@ class FoodTypeQuery extends base_1.BaseQueryHandler {
         let passValidation = this.validate(params);
         if (passValidation) {
             let query = ReusableQueryFunctions_1.default.getCloseAreaQuery(params.lat, params.lng);
-            query.type = params.type;
+            query.cuisineTypesArray = params.type;
             this.getDataByQuery(query, (err, results) => {
                 if (err)
                     callback(err);
                 else {
-                    let processedResults = this.processAndSort(results);
+                    let processedResults = ReusableQueryFunctions_1.default.processAndSort(results);
                     callback(null, processedResults);
                 }
             });
