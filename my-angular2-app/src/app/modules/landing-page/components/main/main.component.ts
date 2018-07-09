@@ -3,7 +3,6 @@
  */
 
 import {Component , OnInit } from '@angular/core';
-import {Observable} from 'rxjs/Rx';
 
 import { Restaurant , Rating } from '../../../../types/API_Consumption_Types';
 import { Api } from '../../../../services/api.service';
@@ -21,7 +20,7 @@ import { ActivePanel , ActiveComponentEnum } from "../../enums";
 @Component({
   templateUrl: './template.html'
 })
-export class MainComponent extends AbstractListPageClass {//implements OnInit {
+export class MainComponent extends AbstractListPageClass {
   types : string[];
 
   pane : string = 'LIST';

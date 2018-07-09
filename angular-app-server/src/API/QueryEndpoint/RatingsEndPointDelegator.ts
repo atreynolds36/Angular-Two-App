@@ -6,10 +6,12 @@ import { ByRestaurantQuery } from './RatingsEndPoint/ByRestaurantQuery';
 import { ByFoodQueryHandler } from './RatingsEndPoint/ByFood';
 import { BaseQueryHandler } from './base';
 import {ByUserIdQuery} from "./RatingsEndPoint/ByUserId";
+import { ByCuisineHandler } from './RatingsEndPoint/ByCuisine';
 
 const byRestaurantQueryHandler= new ByRestaurantQuery();
 const byFoodQueryHandler = new ByFoodQueryHandler();
 const byUserID = new ByUserIdQuery();
+const byCuisine = new ByCuisineHandler();
 
 export default function ( filter ) : BaseQueryHandler {
     switch( filter ){
@@ -19,6 +21,8 @@ export default function ( filter ) : BaseQueryHandler {
             return byFoodQueryHandler;
         case 'byUser' :
             return byUserID;
+        case 'byCuisine' :
+            return byCuisine;
         default :
             return null;
     }

@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Set Location</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <crv-typeahead-component
+    defaultValue={{currentLocation}}
+    [subjectSubmitVal]="locationSubject$"
+    [getResultingOptions]="searchResultListObservable"
+    (selectedValueHandler)="setLocation($event)"
+  ></crv-typeahead-component>
+</ion-content>
+<ion-footer text-center>
+  <button ion-button icon-start>
+    <ion-icon name="locate"></ion-icon>
+    Set as current Location
+  </button>
+</ion-footer>

@@ -9,6 +9,8 @@ import { QUERYRouter} from './API/query';
 import { ModifyRouter } from './API/modify';
 import { MasterDataRouter } from './API/master-data';
 import { GoogleAPIConnector } from './API/google-api-connect';
+import { GetRouter } from "./API/get";
+
 /**
  * The server.
  *
@@ -56,8 +58,13 @@ export class Server {
     }
 
     private routes(){
+        this.app.use('/' , (res : express.Request,req,next) => {
+            console.log(res.baseUrl);
+            next();
+        });
         this.app.use('/create' , CreateRouter.bootstrap() );
         this.app.use('/query' , QUERYRouter.bootstrap() );
+        this.app.use('/get' , GetRouter.bootstrap() );
         this.app.use('/update' , ModifyRouter.bootstrap() );
         this.app.use('/masterdata' , MasterDataRouter.bootstrap() );
         this.app.use('/google-api' , GoogleAPIConnector.bootstrap() );

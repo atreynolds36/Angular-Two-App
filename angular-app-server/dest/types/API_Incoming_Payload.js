@@ -21,7 +21,7 @@ class MongoDocument {
         return true;
     }
     isValidDate(val) {
-        let y = val && val.split('-');
+        let y = val && val.split(/[-\/]/);
         return y && y.length == 3;
     }
 }

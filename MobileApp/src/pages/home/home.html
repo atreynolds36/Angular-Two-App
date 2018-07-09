@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="contact"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="showAddRatingPage()">
+        Add Rating
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-tabs>
+    <ion-tab [root]="listView" tabTitle="ListView"></ion-tab>
+    <ion-tab [root]="mapView" tabTitle="MapView"></ion-tab>
+  </ion-tabs>
+</ion-content>

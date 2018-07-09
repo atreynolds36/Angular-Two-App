@@ -14,6 +14,17 @@ exports.default = {
         }
         return ratingsList;
     },
+    combineRestaurantRatings: (results) => {
+        let ratingsList = Array();
+        let res, pubRating;
+        for (res of results) {
+            for (let rating of res.ratings) {
+                pubRating = wrapRatingToPublicRating(rating, res);
+                ratingsList.push(pubRating);
+            }
+        }
+        return ratingsList;
+    },
     wrapRatingToPublicRating: wrapRatingToPublicRating
 };
 function wrapRatingToPublicRating(rating, res) {

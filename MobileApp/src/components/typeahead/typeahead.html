@@ -1,0 +1,37 @@
+<ion-searchbar *ngIf="(myType == 'SEARCH'); else defaultInput"
+               [(ngModel)]="searchVal"
+               (ionInput)="updateOptionsList($event.target.value)"
+               (ionClear)="clearOptionsList()"
+               (ionFocus)="onInputFocus()"
+               [showCancelButton]="inFocus"
+  >
+</ion-searchbar>
+<ng-template #defaultInput>
+  <ion-item>
+    <ion-label stacked>{{label}}</ion-label>
+    <ion-input [(ngModel)]="searchVal"
+               (keyup)="updateOptionsList($event.target.value)"
+               clearInput="true"
+               (ionClear)="clearOptionsList()"
+               (ionFocus)="onInputFocus()"
+    ></ion-input>
+  </ion-item>
+</ng-template>
+
+<div class="result-list-container" #resultsContainer no-padding [hidden]="!inFocus">
+  <ion-content>
+    <ion-spinner name="dots" #spinner style="margin:auto;display:block;" *ngIf="ifLoading"></ion-spinner>
+    <div #myResultSet class="sub-container">
+        <ion-list *ngIf="showPreferedList">
+          <ion-list-header>
+            <ion-title>Favorites</ion-title>
+            <ion-item *ngFor="let node of preferenceList" (click)="setSelection(node)" text-wrap>{{node.label}}</ion-item>
+          </ion-list-header>
+        </ion-list>
+        <ion-list no-margin >
+          <ion-item *ngFor="let str of results" (click)="setSelection(str)" text-wrap>{{str.label}}</ion-item>
+        </ion-list>
+        <div *ngIf="results && results.length == 0">No Results</div>
+    </div>
+  </ion-content>
+</div>

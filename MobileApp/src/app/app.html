@@ -1,0 +1,28 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>You</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        {{p.title}}
+      </button>
+    </ion-list>
+    <ion-buttons></ion-buttons>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar (click)="showSetLocationModal()">
+      <span>
+        <ion-icon name="navigate"></ion-icon>
+        Your Location
+      </span>
+      <p text-center style="font-weight:bold;">{{datastore.location}}</p>
+    </ion-toolbar>
+  </ion-footer>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

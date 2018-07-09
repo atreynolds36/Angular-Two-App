@@ -14,7 +14,7 @@ class AreaTopRatedQuery extends base_1.BaseQueryHandler {
                 if (err)
                     callback(err);
                 else {
-                    let processedResults = this.processAndSort(results);
+                    let processedResults = ReusableQueryFunctions_1.default.processAndSortRestaurantsByScore(results);
                     callback(null, processedResults);
                 }
             });
@@ -22,16 +22,6 @@ class AreaTopRatedQuery extends base_1.BaseQueryHandler {
         else {
             callback({ validationFailed: 'true' });
         }
-    }
-    processAndSort(results) {
-        let readyToOutResults = results.map((restaurant) => {
-            return restaurant.getAPIOutgoingStructure();
-        });
-        for (let res of readyToOutResults) {
-            if (res.ratings)
-                ReusableQueryFunctions_1.default.quickSort(res.ratings, 'score', 0, res.ratings.length - 1);
-        }
-        return ReusableQueryFunctions_1.default.quickSort(readyToOutResults, 'averageScore', 0, results.length - 1);
     }
     validate(params) {
         if (params.lat && params.lng)

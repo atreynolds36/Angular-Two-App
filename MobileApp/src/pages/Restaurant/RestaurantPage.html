@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{restaurantName}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div style="height:40%;width:100%">
+    <p>My Map</p>
+  </div>
+  <span *ngIf="myRestaurant">
+    <p text-center>{{myRestaurant.address}}</p>
+    <h4 text-center>Average Rating : {{myRestaurant.averageScore}}</h4>
+  <ion-list>
+    <ion-list-header>All Rated Dishes</ion-list-header>
+    <ion-item *ngFor="let rating of myRestaurant.ratings">
+      <ion-thumbnail item-start style="min-width:40px">
+        {{rating.score | number:'2.0-2'}}
+      </ion-thumbnail>
+      <p>{{rating.food}}</p>
+      <p>{{rating.count}}</p>
+      <p>{{rating.lastRated | date }}</p>
+    </ion-item>
+  </ion-list>
+  </span>
+
+
+
+</ion-content>

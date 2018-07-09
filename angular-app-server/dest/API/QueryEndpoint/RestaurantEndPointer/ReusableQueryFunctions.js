@@ -9,7 +9,7 @@ exports.default = {
         return { lat: { $lt: lat + .2, $gt: lat - .2 }, lng: { $lt: lng + .2, $gt: lng - .2 } };
     },
     quickSort: quickSort,
-    processAndSort: processAndSort
+    processAndSortRestaurantsByScore: processAndSort
 };
 function processAndSort(results) {
     let readyToOutResults = results.map((restaurant) => {

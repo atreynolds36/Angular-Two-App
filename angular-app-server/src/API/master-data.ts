@@ -11,7 +11,7 @@ import { Restaurant_Schema , Ratings_Schema, Meals_Schema } from '../types/API_I
 const cuisineMongoCollectionName = 'Cuisine';
 const foodNamesMongoCollectionName = 'FoodMasterData';
 /*
- DEFINES THE /get API ROUTE
+ DEFINES THE /masterdata API ROUTE
  */
 
 export class MasterDataRouter{

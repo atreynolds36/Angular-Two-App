@@ -116,7 +116,7 @@ class Connector {
             }
         });
     }
-    queryById(id, callbackFn) {
+    getRestaurantById(id, callbackFn) {
         let collection = this.mongodb.collection('central.db');
         let docId;
         try {
@@ -127,8 +127,8 @@ class Connector {
         }
         let questionDoc = collection.findOne({ _id: docId }, (err, doc) => {
             if (doc) {
-                console.log(doc);
-                callbackFn(null, doc);
+                let restaurant = new Restaurant_1.RestaurantDO(doc);
+                callbackFn(null, restaurant);
             }
             else
                 callbackFn(new Error('Could not find record'));

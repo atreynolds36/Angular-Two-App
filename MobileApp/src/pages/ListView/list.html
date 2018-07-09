@@ -1,0 +1,85 @@
+<ion-content no-padding>
+  <span [ngSwitch]="searchType">
+    <crv-typeahead-component
+          *ngSwitchCase="'TOPRATED'"
+                              type="search"
+                             [subjectSubmitVal]="searchFoodVal$"
+                             [getResultingOptions]="searchResultListObservable"
+                             (selectedValueHandler)="searchRatingsByFood($event)"
+    ></crv-typeahead-component>
+    <crv-typeahead-component
+      *ngSwitchCase="'BYFOOD'"
+      type="search"
+      [subjectSubmitVal]="searchFoodVal$"
+      [getResultingOptions]="searchResultListObservable"
+      (selectedValueHandler)="searchRatingsByFood($event)"
+    ></crv-typeahead-component>
+    <crv-typeahead-component
+      *ngSwitchCase="'BYCUISINE'"
+      type="search"
+      [subjectSubmitVal]="searchCuisineVal$"
+      [getResultingOptions]="searchResultListObservableForCuisine"
+      (selectedValueHandler)="searchRatingsByCuisine($event)"
+      [preferenceList]="cuisinePreferedList"
+    ></crv-typeahead-component>
+
+  </span>
+
+  <ion-segment [(ngModel)]="searchType">
+    <ion-segment-button value="TOPRATED" (ionSelect)="searchType=$event.value" >
+      Top Rated
+    </ion-segment-button>
+    <ion-segment-button value='BYFOOD' (ionSelect)="searchType=$event.value">
+      By Food
+    </ion-segment-button>
+    <ion-segment-button value='BYCUISINE' (ionSelect)="searchType=$event.value">
+      By Cuisine
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="activePanel == 'RESTAURANT'">
+    <ion-list>
+      <ion-item *ngFor="let rest of restaurantList" class="crv-list-view-item" (click)="goToRestaurantPage(rest)">
+        <ion-thumbnail item-start style="min-width:40px">
+          {{rest.averageScore | number:'2.0-2'}}
+        </ion-thumbnail>
+        <ion-list-header text-wrap>
+          {{rest.name}}
+        </ion-list-header>
+        <div>
+          <h5>Top Rated</h5>
+          <p *ngFor="let rating of rest.ratings">
+            <b>{{rating.score}}</b> - {{rating.food}}
+          </p>
+          <button ion-button clear float-end>See More</button>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="activePanel == 'RATING'">
+    <ion-list>
+      <ion-item *ngFor="let rating of ratingsList" class="crv-list-view-item" (click)="goToRestaurantPage(rating.restaurant , true )">
+        <ion-thumbnail item-start style="min-width:40px">
+          {{rating.score | number:'2.0-1' }}
+        </ion-thumbnail>
+        <ion-list-header>
+          {{rating.food}}
+        </ion-list-header>
+        <div>
+          <p>Rated <b>{{rating.count}}</b> times</p>
+          <p><b>From - </b> {{rating.restaurant.name}}</p>
+          <p><b>Last Rated - </b> {{rating.lastRated | date }}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="showNoResults()">
+    No Results Found in Area
+  </div>
+  <div *ngIf="ifLoading" text-center>
+    <ion-spinner name="dots"></ion-spinner>
+  </div>
+
+</ion-content>

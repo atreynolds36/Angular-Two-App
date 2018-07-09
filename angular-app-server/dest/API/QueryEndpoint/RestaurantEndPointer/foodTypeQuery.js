@@ -15,7 +15,7 @@ class FoodTypeQuery extends base_1.BaseQueryHandler {
                 if (err)
                     callback(err);
                 else {
-                    let processedResults = ReusableQueryFunctions_1.default.processAndSort(results);
+                    let processedResults = ReusableQueryFunctions_1.default.processAndSortRestaurantsByScore(results);
                     callback(null, processedResults);
                 }
             });
@@ -23,22 +23,6 @@ class FoodTypeQuery extends base_1.BaseQueryHandler {
         else {
             callback({ validationFailed: 'true' });
         }
-    }
-    processAndSort(results) {
-        let tempCount, tempScore;
-        for (let node of results) {
-            tempCount = 0;
-            tempScore = 0;
-            for (let rating of node.ratings) {
-                tempCount += rating.count;
-                tempScore += (rating.score * rating.count);
-            }
-            node.totalCount = tempCount;
-            node.scoreAverage = tempScore / tempCount;
-            if (node.ratings)
-                ReusableQueryFunctions_1.default.quickSort(node.ratings, 'score', 0, node.ratings.length - 1);
-        }
-        return ReusableQueryFunctions_1.default.quickSort(results, 'scoreAverage', 0, results.length - 1);
     }
     validate(params) {
         if (params.lat && params.lng && params.type)

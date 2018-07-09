@@ -29,6 +29,7 @@ export class GoogleAPIConnector{
 
     configRoutes(){
         this.router.get('/places/auto-complete' , this.placeAutoCompleteFn.bind(this) );
+        this.router.get('/places/byId' , this.handlePlaceByPlaceId.bind(this) );
     }
 
     placeAutoCompleteFn(req : Request, res : Response){
@@ -39,22 +40,16 @@ export class GoogleAPIConnector{
         }).pipe(res);
     }
 
-    static getLatAndLngFromAddress(address : string , callbackFn : (err : Error , lat ?: number , lng ?: number ) => void ) : void {
-        request({
-            url : geocodingGMApiUri + "&address=" + address
-        } , (err, responseCode , body ) => {
-            if(err){
-                console.error('Could not find ' + address );
-                callbackFn(err);
-            }else{
-                let latLngObject = body.results[0];
-                let lat = Number( latLngObject.geometry.location.lat );
-                let lng = Number( latLngObject.geometry.location.lng );
-                console.log(lat + "!" + lng );
-                callbackFn(null, lat , lng );
-            }
-        })
+    async handlePlaceByPlaceId( req : express.Request , res : express.Response ){
+        let placeId = req.query.placeId;
+        if( placeId ){
+            let restaurant : Restaurant = await GoogleAPIConnector.getPlaceByPlaceId( placeId );
+            res.status(200).send(restaurant);
+        } else{
+            res.status(406).send({ invalidRequest : 'placeId param is required'});
+        }
     }
+
 
     static async getPlaceByPlaceId( placeId : string ) : Promise<Restaurant> {
         return new Promise( (resolve : (res : Restaurant ) => void , reject : (err) => void ) => {

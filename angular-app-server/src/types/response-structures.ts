@@ -4,7 +4,6 @@ interface QueryJsonResponse{
 }
 
 
-
 // NOT USED I DONT THINK
 export class QueryResponse implements  QueryJsonResponse {
     results : Array<Node>;

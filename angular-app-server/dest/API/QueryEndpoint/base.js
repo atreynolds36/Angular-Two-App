@@ -10,7 +10,7 @@ class BaseQueryHandler {
     }
     getDataByQuery(query, callback) {
         this.connector.centralQuery(query, (err, results) => {
-            console.log('query res length ' + results && results.length);
+            console.log('query res length ' + (results && results.length));
             if (err)
                 callback(err);
             else
@@ -18,7 +18,7 @@ class BaseQueryHandler {
         });
     }
     getDataById(id, callback) {
-        this.connector.queryById(id, (err, doc) => {
+        this.connector.getRestaurantById(id, (err, doc) => {
             console.log('fetch ' + doc);
             if (err)
                 callback(err);

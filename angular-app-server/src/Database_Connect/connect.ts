@@ -143,7 +143,7 @@ export class Connector {
         })
     }
 
-    public queryById(id: string, callbackFn: (err: Error, docs ?: any) => void): void {
+    public getRestaurantById(id: string, callbackFn: (err: Error, docs ?: RestaurantDO ) => void): void {
         let collection = this.mongodb.collection('central.db');
         let docId;
         try {
@@ -153,8 +153,8 @@ export class Connector {
         }
         let questionDoc = collection.findOne({_id: docId}, (err, doc) => {
             if (doc) {
-                console.log(doc);
-                callbackFn(null, doc)
+                let restaurant : RestaurantDO = new RestaurantDO( doc as MongoRestaurant );
+                callbackFn(null, restaurant);
             } else
                 callbackFn(new Error('Could not find record'));
         });

@@ -7,6 +7,7 @@ const query_1 = require("./API/query");
 const modify_1 = require("./API/modify");
 const master_data_1 = require("./API/master-data");
 const google_api_connect_1 = require("./API/google-api-connect");
+const get_1 = require("./API/get");
 class Server {
     static bootstrap() {
         return new Server();
@@ -26,8 +27,13 @@ class Server {
         });
     }
     routes() {
+        this.app.use('/', (res, req, next) => {
+            console.log(res.baseUrl);
+            next();
+        });
         this.app.use('/create', create_1.CreateRouter.bootstrap());
         this.app.use('/query', query_1.QUERYRouter.bootstrap());
+        this.app.use('/get', get_1.GetRouter.bootstrap());
         this.app.use('/update', modify_1.ModifyRouter.bootstrap());
         this.app.use('/masterdata', master_data_1.MasterDataRouter.bootstrap());
         this.app.use('/google-api', google_api_connect_1.GoogleAPIConnector.bootstrap());

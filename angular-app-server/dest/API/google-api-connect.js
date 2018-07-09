@@ -25,6 +25,7 @@ class GoogleAPIConnector {
     }
     configRoutes() {
         this.router.get('/places/auto-complete', this.placeAutoCompleteFn.bind(this));
+        this.router.get('/places/byId', this.handlePlaceByPlaceId.bind(this));
     }
     placeAutoCompleteFn(req, res) {
         let urlParamStr = req.url.substr(req.url.indexOf('?'));
@@ -33,20 +34,15 @@ class GoogleAPIConnector {
             url: GOOGLE_PLACES_URI + urlParamStr
         }).pipe(res);
     }
-    static getLatAndLngFromAddress(address, callbackFn) {
-        request({
-            url: geocodingGMApiUri + "&address=" + address
-        }, (err, responseCode, body) => {
-            if (err) {
-                console.error('Could not find ' + address);
-                callbackFn(err);
+    handlePlaceByPlaceId(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let placeId = req.query.placeId;
+            if (placeId) {
+                let restaurant = yield GoogleAPIConnector.getPlaceByPlaceId(placeId);
+                res.status(200).send(restaurant);
             }
             else {
-                let latLngObject = body.results[0];
-                let lat = Number(latLngObject.geometry.location.lat);
-                let lng = Number(latLngObject.geometry.location.lng);
-                console.log(lat + "!" + lng);
-                callbackFn(null, lat, lng);
+                res.status(406).send({ invalidRequest: 'placeId param is required' });
             }
         });
     }

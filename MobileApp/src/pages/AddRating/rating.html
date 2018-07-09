@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Add Food Review</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <crv-typeahead-component
+    #restaurantInput
+    label="Restaurant"
+    [subjectSubmitVal]="restaurantSubject$"
+    [getResultingOptions]="searchResultListObservable"
+    (selectedValueHandler)="restaurantInput.value=$event"
+  ></crv-typeahead-component>
+  <ion-item>
+    <ion-label color="primary" stacked>Food</ion-label>
+    <ion-input #food placeholder="Food name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Score</ion-label>
+    <ion-input #score placeholder="Score 0-99"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Price</ion-label>
+    <ion-input #price placeholder="1-5"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary" stacked>Date</ion-label>
+    <ion-input #date placeholder="MM-DD-YYYY"></ion-input>
+  </ion-item>
+  <button ion-button full margin-top (click)="submitRating(restaurantInput.value , food.value , score.value , price.value , date.value )">
+    Submit Score
+  </button>
+</ion-content>
